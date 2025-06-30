@@ -26,21 +26,22 @@ exports.getOneTask = async (req, res) => {
     }
 }
 
-exports.CreateTask = async (req, res) => {
+exports.createTask = async (req, res) => {
     const { title } = req.body;;
     if(!title) {
         return res.status(500).json({ message: "No title  given"});
     }
 
     try {
-        const task = Task({title}).save();
+        const task = Task({title});
+        await task.save();
         res.json(task);
     } catch (err) {
         res.status(500).json({message: err.message});
     }
 };
 
-exports.UpdateTask = async (req, res) => {
+exports.updateTask = async (req, res) => {
     const { id } = req.body;
     const { title } = req.body
     const { status } = req.body
@@ -66,7 +67,7 @@ exports.UpdateTask = async (req, res) => {
 
 }
 
-exports.DeleteTask = async (req, res) => {
+exports.deleteTask = async (req, res) => {
     try {
     const task = await Task.findById(req.params.id);
     if (!task) return res.status(404).json({ message: 'No task found' });
